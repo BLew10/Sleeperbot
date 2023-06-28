@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-class SleeperAPI {
+export class SleeperAPI {
      api =  axios.create({
                 baseURL: 'https://api.sleeper.app/v1',
             });;
 
-     getNflState = async () => {
+    getWeek = async () => {
         try {
-            const response = await api.get('/state/nfl');
+            const response = await this.api.get('/state/nfl');
             if(response.data) {
-                const nflState = JSON.parse(response.data);
-                return nflState;
+                const nflState = response.data;
+                return nflState.week.toString();
             }
             else
                 return null;
@@ -22,7 +22,7 @@ class SleeperAPI {
         try {
             const nflState = await this.getNflState();
             nflState.week = nflState.week > 0 ? nflState.week : 1;
-            const response = await api.get(`/league/${leagueId}/transactions/${nflState.week}`);
+            const response = await this.api.get(`/league/${leagueId}/transactions/${nflState.week}`);
             return response.data;
         } catch (error) {
             console.error(error);
@@ -32,7 +32,7 @@ class SleeperAPI {
 
         getPlayers = async (leagueId) => {
         try {
-            const response = await api.get(`/league/${leagueId}/rosters`);
+            const response = await this.api.get(`/league/${leagueId}/rosters`);
             return response.data;
         } catch (error) {
             console.error(error);
@@ -43,5 +43,3 @@ class SleeperAPI {
 
 
 }
-
-export default SleeperAPI;

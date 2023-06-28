@@ -1,20 +1,7 @@
-import { Client, GatewayIntentBits, Partials} from 'discord.js';
-import { initCommands, initEvents } from './initializeClient.js';
+import { DiscordClient } from './models/DiscordClient.js';
 import dotenv from 'dotenv';
-
 dotenv.config();
-const client = new Client({ 
-        intents: [
-                GatewayIntentBits.Guilds,
-                GatewayIntentBits.GuildMessages,
-                GatewayIntentBits.MessageContent,
-                GatewayIntentBits.GuildMembers], 
-        partials: [
-                Partials.Channel, 
-                Partials.Message]
-            });
+ 
+const client = new DiscordClient(process.env.DISCORD_TOKEN, process.env.CLIENT_ID, process.env.GUILD_ID);
 
-initCommands(client);
-initEvents(client);
-
-client.login(process.env.DISCORD_TOKEN);
+client.initialize();
